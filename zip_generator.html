@@ -5,10 +5,10 @@
 
 		function generateZIP(){
 			var text = document.getElementById("xmlinput").value;
-			text = text.replace(/\n?•.+?#.+?\[.+?\] /g, "");
+			text = text.replace(/•.+?#.+?\[.+?\] /g, "");
 			text = text.replace(/\n+/g, "\n");
 			var xml2image = document.getElementById("swf").XML2Base64;
-			var mapset = text.match(/[^<>]*<C>.*?<\/C>/g);
+			var mapset = text.match(/[^<>\n]*<C>[\s\S]*?<\/C>/g);
 			var i, str, code, xml, image;
 			var folderName = "images" + (new Date()).getTime();
 
@@ -21,7 +21,7 @@
 			var numImage = 0;
 			for(i = 0; i < mapset.length; i++){
 				str = mapset[i];
-				code = str.match(/@\d+/);
+				code = str.match(/\d+/);
 				code = code ? code[0] : "map" + i;
 				xml = str.match(/<C>.*?<\/C>/)[0];
 				image = xml2image(xml, code);
