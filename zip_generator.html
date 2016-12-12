@@ -25,7 +25,7 @@
 				code = str.match(/\d+/);
 				code = code ? code[0] : "map" + i;
 				mapinfo = str.match(/[^<>]*/)[0].replace(/\t/g, " - ");
-				xml = str.match(/<C>.*?<\/C>/)[0];
+				xml = str.match(/<C>[\s\S]*?<\/C>/)[0];
 				image = xml2image(xml, mapinfo);
 				if(!image) {
 					log("invalid image : " + code);
