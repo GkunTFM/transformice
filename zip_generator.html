@@ -10,7 +10,7 @@
 			document.getElementById("xmlinput").value = text;
 			var xml2image = document.getElementById("swf").XML2Base64;
 			var mapset = text.match(/[^<>\n]*<C>[\s\S]*?<\/C>/g);
-			var i, str, code, xml, image;
+			var i, str, code, xml, image, mapinfo;
 			var folderName = "images" + (new Date()).getTime();
 
 			if(mapset == null) {
@@ -24,8 +24,9 @@
 				str = mapset[i];
 				code = str.match(/\d+/);
 				code = code ? code[0] : "map" + i;
+				mapinfo = str.match(/[^<>]*/)[0].replace(/\t/g, " - ");
 				xml = str.match(/<C>.*?<\/C>/)[0];
-				image = xml2image(xml, code);
+				image = xml2image(xml, mapinfo);
 				if(!image) {
 					log("invalid image : " + code);
 					continue;
