@@ -5,7 +5,7 @@
 
 		function generateZIP(){
 			var text = document.getElementById("xmlinput").value;
-			text = text.replace(/•.+?#.+?\[.+?\] /g, "");
+			text = text.replace(/\n?•.+?#.+?\[.+?\] /g, "");
 			text = text.replace(/\n+/g, "\n");
 			document.getElementById("xmlinput").value = text;
 			var xml2image = document.getElementById("swf").XML2Base64;
@@ -17,7 +17,7 @@
 				log("invalid input");
 				return;
 			}
-
+			log("generating zip file");
 			var zip = new JSZip();
 			var numImage = 0;
 			for(i = 0; i < mapset.length; i++){
