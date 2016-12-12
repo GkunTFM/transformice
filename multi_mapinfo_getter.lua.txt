@@ -1,0 +1,92 @@
+﻿--[[
+if(!window.ta) {
+	window.ta = document.createElement("textarea");
+	document.body.appendChild(ta);
+}
+
+function yaru(){
+	var str = ta.value;
+	str = str.replace(/\n?•.+?#.+?\[.+?\] /g, "");
+	str = str.replace(/\n+/g, "\n");
+	ta.value = str;
+}
+]]
+
+function init(s)
+	maps = {};
+	for a in string.gmatch(s, "@(%d+)") do
+		if tonumber(a) then
+			table.insert(maps, tonumber(a))
+		end
+	end
+	mindex = 1;
+	last = os.time();
+	print(#maps * 3.5);
+end
+
+function eventNewGame()
+	if maps then
+		last = os.time();
+		local info = tfm.get.room.xmlMapInfo;
+		local wind, gravity, noBalloon, opportunist;
+		local xml = info.xml;
+		local ptag = string.match(xml, "(<P .-/>)");
+		if ptag then
+			wind, gravity = string.match(ptag, "G%s*=%s*\"(.-),%s*(.-)\"");
+			noBalloon = string.match(ptag, [[DIVINITYNOBALLOON%s*=%s*""]]) and "no_balloon " or "";
+			opportunist = string.match(ptag, [[DIIVNITYOPPORTUNIST%s*=%s*""]]) and "opportunist " or "";
+		end
+		info.wind, info.gravity = wind or 0, gravity or 10;
+		info.divconf = noBalloon .. opportunist;
+		info.atcode = "@" + info.mapCode;
+		local a = {"mapCode", "author", "wind", "gravity", "atcode", "divconf", "xml"};
+		str = str or "";
+		for i, v in ipairs(a) do
+			str = str .. info[v] .. "	";
+		end
+		print("loaded:"..info.mapCode);
+		if info.mapCode == maps[#maps] then
+			printls(str);
+			maps = nil;
+		end
+	end
+end
+
+function printls(str)
+	str = tostring(str);
+	local len = str:len();
+	local t = math.floor((len + 3999) / 4000)
+	for i = 1, t do
+		print((str:sub((i - 1) * 4000 + 1, i * 4000)):gsub("<", "&lt;"));
+	end
+end
+
+function eventLoop()
+	if last and os.difftime(os.time(), last) >= 3500 and maps and maps[mindex] then
+		tfm.exec.newGame(maps[mindex]);
+		print("load:"..maps[mindex]);
+		mindex = mindex + 1;
+		last = nil;
+	end
+end
+
+
+tfm.exec.disableAutoNewGame()
+
+init([[
+@6921807
+@4372606
+@655098
+@6928849
+@6928836
+@5695427
+@6943100
+@6916724
+@6917153
+@6931570
+@6939253 , @6938837 , @6937922 , @6937627 , @6866003 , @6865943 ,
+@6944696
+@6883742
+@6946947
+@6950054
+]]);
