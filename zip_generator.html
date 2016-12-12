@@ -7,6 +7,7 @@
 			var text = document.getElementById("xmlinput").value;
 			text = text.replace(/•.+?#.+?\[.+?\] /g, "");
 			text = text.replace(/\n+/g, "\n");
+			document.getElementById("xmlinput").value = text;
 			var xml2image = document.getElementById("swf").XML2Base64;
 			var mapset = text.match(/[^<>\n]*<C>[\s\S]*?<\/C>/g);
 			var i, str, code, xml, image;
