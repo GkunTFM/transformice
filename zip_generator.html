@@ -1,0 +1,56 @@
+<html>
+<body>
+	<script type="text/javascript" src="lib/jszip.js"></script>
+	<script type="text/javascript">
+
+		function generateZIP(){
+			var text = document.getElementById("xmlinput").value;
+			text = text.replace(/\n?•.+?#.+?\[.+?\] /g, "");
+			text = text.replace(/\n+/g, "\n");
+			var xml2image = document.getElementById("swf").XML2Base64;
+			var mapset = text.match(/[^<>]*<C>.*?<\/C>/g);
+			var i, str, code, xml, image;
+			var folderName = "images" + (new Date()).getTime();
+
+			if(mapset == null) {
+				log("invalid input");
+				return;
+			}
+
+			var zip = new JSZip();
+			var numImage = 0;
+			for(i = 0; i < mapset.length; i++){
+				str = mapset[i];
+				code = str.match(/@\d+/);
+				code = code ? code[0] : "map" + i;
+				xml = str.match(/<C>.*?<\/C>/)[0];
+				image = xml2image(xml, code);
+				if(!image) {
+					log("invalid image : " + code);
+					continue;
+				}
+				numImage++;
+				zip.file(folderName + "/" + code + ".png", image, {"base64": true});
+			}
+			zip.generateAsync({type:"blob"}).then(function (blob) {
+				log(numImage + " images have been generated.");
+				var dl = document.getElementById("download");
+				dl.download = folderName + ".zip";
+				dl.href = window.URL.createObjectURL(blob);
+				dl.click();
+			});
+		}
+
+		function log(str){
+			console.log(str);
+			document.getElementById("info").innerText = str;
+		}
+	</script>
+	<p>this tool doesn't work on IE. Flash Player is required.</p>
+	<textarea id="xmlinput" style="width:600;height: 400"></textarea>	<br />	
+	<input type="button" value="Generate images and save" onclick="generateZIP()" /> status: <span id="info" style="color: blue">loading components...</span>
+	<object id="swf" data="XML2Base64.swf" type="application/x-shockwave-flash" width="10" height="10">
+	<param name="allowScriptAccess" value="always" /></object>
+	<a id="download" style="display: none"></a>
+</body>
+</html>

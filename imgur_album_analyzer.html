@@ -1,0 +1,45 @@
+<html>
+<body>
+
+	<script type="text/javascript">
+		function createXHR(imageid){
+			var xhr = new XMLHttpRequest();
+
+			xhr.open("GET", "https://api.imgur.com/3/album/" + imageid + "/images", true);
+			xhr.setRequestHeader("Authorization", "Client-ID 94e84e2613dc2d3");
+			xhr.onreadystatechange = function (){
+				if(xhr.readyState == 4){
+					if(xhr.status == 200){
+						var json;
+						eval("json = " + xhr.responseText);
+						var links = "";
+						json.data.forEach(function(d){
+							links += d.link + "\n";
+						});
+						document.getElementById("result").value = links;
+					} else {
+						document.getElementById("result").value = "failed to load album data.";
+						return;
+					}
+				}
+			}
+			xhr.send(null);
+		}
+
+		function excute(){
+			var imageid = document.getElementById("imageid").value;
+			imageid = imageid.match(/\/a\/(.+)/);
+			if(imageid == null) {
+				document.getElementById("result").value = "invalid url input";
+				return;
+			}
+			imageid = imageid[1];
+			createXHR(imageid);
+		}
+
+	</script>
+	<input type="text" id="imageid" />
+	<input type="button" value="get info of the album" onclick="excute();" /><br />
+	<textarea id="result" style="width:800;height: 300"></textarea>
+</body>
+</html>
