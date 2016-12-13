@@ -1,38 +1,6 @@
 ﻿--[[
-//printls string decoder (javascript)
-
-function decodePrintls(input){
-	input = input.replace(/[\s\S]*(!s1;)/, "$1");
-	var output = "";
-	var i;
-	var mt;
-	var reg;
-	console.log(input);
-	for(i = 1; ; i++){
-		reg = new RegExp("!s" + i + ";([\\S\\s]*?)!e" + i + ";");
-		console.log(reg);
-		mt = input.match(reg);
-		if(mt) {
-			output += mt[1];
-		} else {
-			break;
-		}
-	}
-	if(i == 1) output = input;
-	return output;
-}
-
-(function showUI(){
-	var ta = document.createElement("textarea");
-	ta.style.height = 200;
-	ta.style.width = 300;
-	document.body.appendChild(ta);
-	var button = document.createElement("input");
-	button.type = "button";
-	button.value = "decode printls string";
-	button.onclick = function(){ta.value = decodePrintls(ta.value);};
-	document.body.appendChild(button);
-})();
+the decoder to turn the printed string into the original string is here
+https://gkuntfm.github.io/transformice/printls_decoder.js
 ]]
 
 printls = {
@@ -66,12 +34,13 @@ printls = {
 			local len = str:len();
 			while ind <= len do
 				temstr = str:sub(ind, ind + 4500 - 1);
-				sublen = 4500;
-				amp = temstr:find("&", -3);
-				if amp then
-					temstr = temstr:sub(1, amp - 1);
-					sublen = amp - 1;
+				for i = 1,3 do
+					if temstr:sub(-i,-i) == "&" then
+						temstr = temstr:sub(1, -i-1);
+						break;
+					end
 				end
+				sublen = temstr:len();
 				table.insert(printls.strings, temstr);
 				ind = ind + sublen;
 			end
