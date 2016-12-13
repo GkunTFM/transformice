@@ -1,0 +1,76 @@
+﻿--[[
+function decodePrintls(input){
+	input = input.replace(/[\s\S]*(!s1;)/, "$1");
+	var output = "";
+	var i;
+	var mt;
+	var reg;
+	for(i = 0; ; i++){
+		reg = new RegExp("!s" + i + ";([\\S\\s]*?)!e" + i + ";");
+		mt = input.match(reg);
+		if(mt) {
+			output += mt[1];
+		} else {
+			break;
+		}
+	}
+	return output;
+}
+
+(function showUI(){
+	var ta = document.createElement("textarea");
+	ta.style.height = 200;
+	ta.style.width = 300;
+	document.body.appendChild(ta);
+	var button = document.createElement("input");
+	button.type = "button";
+	button.value = "decode printls string";
+	button.onclick = function(){ta.value = decodePrintls(ta.value);};
+	document.body.appendChild(button);
+})();
+]]
+
+printls = {
+	BLOCKSIZE = 15,
+
+	strings = {},
+	index = 1,
+
+	outputBlocks =
+		function ()
+			if printls.index <= #(printls.strings) then
+				local min = printls.index;
+				local max = math.min(min + printls.BLOCKSIZE - 1, #(printls.strings));
+				for i = min, max do
+					print(("!s%s;%s!e%s;"):format(i, printls.strings[i], i));
+				end
+				printls.index = max + 1;
+			else
+				print("nothing to print");
+			end
+		end,
+	setString =
+		function (str)
+			str = str:gsub("<", "&lt;");
+			printls.strings = {};
+
+			local temstr;
+			local amp = nil;
+			local ind = 1;
+			local sublen;
+			local len = str:len();
+			while ind <= len do
+				temstr = str:sub(ind, ind + 4500 - 1);
+				sublen = 4500;
+				amp = temstr:find("&", -3);
+				if amp then
+					temstr = temstr:sub(1, amp - 1);
+					sublen = amp - 1;
+				end
+				printls.strings.push(temstr);
+				ind = ind + sublen;
+			end
+			printls.index = 1;
+			print(("ready to print %s string blocks"):format(#(printls.strings)));
+		end
+};
