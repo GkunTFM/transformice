@@ -4,7 +4,6 @@
 	var i;
 	var mt;
 	var reg;
-	console.log(input);
 	for(i = 1; ; i++){
 		reg = new RegExp("!s" + i + ";([\\S\\s]*?)!e" + i + ";");
 		mt = input.match(reg);
