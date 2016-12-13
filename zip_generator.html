@@ -1,12 +1,12 @@
 <html>
 <body>
 	<script type="text/javascript" src="lib/jszip.js"></script>
+	<script type="text/javascript" src="printls_decoder.js"></script>
 	<script type="text/javascript">
 
 		function generateZIP(){
 			var text = document.getElementById("xmlinput").value;
-			text = text.replace(/\n?•.+?#.+?\[.+?\] /g, "");
-			text = text.replace(/\n+/g, "\n");
+			text = decodePrintls(text);
 			document.getElementById("xmlinput").value = text;
 			var xml2image = document.getElementById("swf").XML2Base64;
 			var mapset = text.match(/[^<>\n]*<C>[\s\S]*?<\/C>/g);
@@ -49,10 +49,12 @@
 		}
 	</script>
 	<p>this tool doesn't work on IE. Flash Player is required.</p>
-	<textarea id="xmlinput" style="width:600;height: 400"></textarea>	<br />	
-	<input type="button" value="Generate images and save" onclick="generateZIP()" /> status: <span id="info" style="color: blue">loading components...</span>
-	<object id="swf" data="XML2Base64.swf" type="application/x-shockwave-flash" width="10" height="10">
-	<param name="allowScriptAccess" value="always" /></object>
+	<div>
+		status: <span id="info" style="color: blue">loading components...</span><br/>
+		<textarea id="xmlinput" style="width:600;height: 400"></textarea>	<br />	
+		<input type="button" value="Generate images and save" onclick="generateZIP()" /> 
+	</div>
+	<object id="swf" data="XML2Base64.swf" type="application/x-shockwave-flash" width="10" height="10"><param name="allowScriptAccess" value="always" /></object>
 	<a id="download" style="display: none"></a><br/>
 	<a href="imgur_album_analyzer.html">Analyze an album on Imgur and extract its images' url</a>
 </body>
