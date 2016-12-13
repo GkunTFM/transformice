@@ -11,6 +11,7 @@
 			var xml2image = document.getElementById("swf").XML2Base64;
 			var mapset = text.match(/[^<>\n]*<C>[\s\S]*?<\/C>/g);
 			var i, str, code, xml, image, mapinfo;
+			var folderName = "images" + (new Date()).getTime();
 
 			if(mapset == null) {
 				log("invalid input");
