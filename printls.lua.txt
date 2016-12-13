@@ -1,12 +1,16 @@
 ﻿--[[
+//printls string decoder (javascript)
+
 function decodePrintls(input){
 	input = input.replace(/[\s\S]*(!s1;)/, "$1");
 	var output = "";
 	var i;
 	var mt;
 	var reg;
-	for(i = 0; ; i++){
+	console.log(input);
+	for(i = 1; ; i++){
 		reg = new RegExp("!s" + i + ";([\\S\\s]*?)!e" + i + ";");
+		console.log(reg);
 		mt = input.match(reg);
 		if(mt) {
 			output += mt[1];
@@ -14,6 +18,7 @@ function decodePrintls(input){
 			break;
 		}
 	}
+	if(i == 1) output = input;
 	return output;
 }
 
@@ -67,10 +72,10 @@ printls = {
 					temstr = temstr:sub(1, amp - 1);
 					sublen = amp - 1;
 				end
-				printls.strings.push(temstr);
+				table.insert(printls.strings, temstr);
 				ind = ind + sublen;
 			end
 			printls.index = 1;
-			print(("ready to print %s string blocks"):format(#(printls.strings)));
+			print(("ready to print %s string blocks in %s steps"):format(#(printls.strings), math.ceil(#(printls.strings) / printls.BLOCKSIZE)));
 		end
 };
