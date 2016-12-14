@@ -2,12 +2,12 @@
 //excute this script on the album page
 (function showUI(){
 	var ta = document.createElement("textarea");
-	ta.style.height = 200;
-	ta.style.width = 300;
+	ta.style.height = 600;
+	ta.style.width = 600;
 	document.body.insertBefore(ta, document.body.firstChild);
 	var button = document.createElement("input");
 	button.type = "button";
-	button.value = "decode printls string";
+	button.value = "excute";
 	button.onclick = function(){
 		var imgs = _widgetFactory._.config.gallery.image.album_images.images;
 		var data = [];

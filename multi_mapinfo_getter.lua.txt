@@ -204,7 +204,7 @@ function eventNewGame()
 		end
 		info.wind, info.gravity = wind or 0, gravity or 10;
 		info.divconf = noBalloon .. opportunist;
-		local a = {"mapCode", "author", "gravity", "wind", "divconf", "xml"};
+		local a = {"mapCode", "author", "permCode", "gravity", "wind", "divconf", "xml"};
 		str = str or "";
 		for i, v in ipairs(a) do
 			str = str .. info[v] .. "	";
