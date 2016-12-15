@@ -2,8 +2,8 @@
 //excute this script on the album page
 (function showUI(){
 	var ta = document.createElement("textarea");
-	ta.style.height = 600;
-	ta.style.width = 600;
+	ta.style.height = '600px';
+	ta.style.width = '600px';
 	document.body.insertBefore(ta, document.body.firstChild);
 	var button = document.createElement("input");
 	button.type = "button";
