@@ -12,6 +12,8 @@
 			var mapset = text.match(/[^<>\n]*<C>[\s\S]*?<\/C>/g);
 			var i, str, code, xml, image, mapinfo;
 			var folderName = "images" + (new Date()).getTime();
+			var images_per_zip = parseInt(document.getElementById("images_per_zip").value);
+			if(!images_per_zip || images_per_zip < 1) images_per_zip = 120;
 
 			if(mapset == null) {
 				log("invalid input");
@@ -33,11 +35,19 @@
 				}
 				numImage++;
 				zip.file(code + ".png", image, {"base64": true});
+				log("progress: " + (i + 1) + "/" + mapset.length);
+				if(numImage % images_per_zip == 0) {
+					saveZip(zip, folderName + "_" + (numImage / images_per_zip) + ".zip");
+					zip = new JSZip();
+				}
 			}
+			if(numImage % images_per_zip != 0) saveZip(zip, folderName + "_" + Math.ceil(numImage / images_per_zip) + ".zip");
+		}
+
+		function saveZip(zip, folder){
 			zip.generateAsync({type:"blob"}).then(function (blob) {
-				log(numImage + " images have been generated.");
 				var dl = document.getElementById("download");
-				dl.download = folderName + ".zip";
+				dl.download = folder;
 				dl.href = window.URL.createObjectURL(blob);
 				dl.click();
 			});
@@ -51,7 +61,8 @@
 	<p>this tool doesn't work on IE. Flash Player is required.</p>
 	<div>
 		status: <span id="info" style="color: blue">loading components...</span><br/>
-		<textarea id="xmlinput" style="width:600;height: 400"></textarea>	<br />	
+		<textarea id="xmlinput" style="width:600;height: 400"></textarea>	<br />
+		the number of images per one zip file : <input type="text" value="120" id="images_per_zip" /><br/>
 		<input type="button" value="Generate images and save" onclick="generateZIP()" /> 
 	</div>
 	<object id="swf" data="XML2Base64.swf" type="application/x-shockwave-flash" width="10" height="10"><param name="allowScriptAccess" value="always" /></object>

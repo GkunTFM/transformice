@@ -1,15 +1,32 @@
 ﻿--[[
-the decoder to turn the printed string into the original string is here
+
+This module "printls" is to output a big size text by calling "print()" multiple times. print() can output up to 5000 letters on one call. So this module is useful when you need to print a longer text.
+
+Author: Gekkeiju
+Last Update: 2016/12/15
+
+printls.setString(text)
+	reserves a text to output. the text is divided into blocks and you can output the blocks by calling outputNextBlock.
+	- arguments
+		text: the string you want to output
+
+printls.outputNextBlock()
+	outputs the next block.
+	- return
+		true: a block was printed.
+		false: no block was waiting to be printed.
+
+the decoder to convert the printed string into the original string is here
 https://gkuntfm.github.io/transformice/printls_decoder.js
 ]]
 
 printls = {
-	BLOCKSIZE = 15,
+	BLOCKSIZE = 30,
 
 	strings = {},
 	index = 1,
 
-	outputBlocks =
+	outputNextBlock =
 		function ()
 			if printls.index <= #(printls.strings) then
 				local min = printls.index;
@@ -18,8 +35,10 @@ printls = {
 					print(("!s%s;%s!e%s;"):format(i, printls.strings[i], i));
 				end
 				printls.index = max + 1;
+				return true;
 			else
 				print("nothing to print");
+				return false;
 			end
 		end,
 	setString =

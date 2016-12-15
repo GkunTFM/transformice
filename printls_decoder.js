@@ -13,18 +13,20 @@
 			break;
 		}
 	}
-	if(i == 1) output = input;
+	if(i == 1){
+		if(input.match(/!s\d+;/)) output = "Error : The first print block is missing";
+		else output = input;
+	}
 	return output;
 }
 
 function showUI(){
-	var ta = document.createElement("textarea");
-	ta.style.height = 200;
-	ta.style.width = 300;
-	document.body.appendChild(ta);
-	var button = document.createElement("input");
-	button.type = "button";
-	button.value = "decode printls string";
-	button.onclick = function(){ta.value = decodePrintls(ta.value);};
-	document.body.appendChild(button);
+	var div = document.createElement("div");
+	div.innerHTML = '<textarea id="printls_textarea" style="width: 600px;height: 300px"></textarea><br/><input type="button" value="extract the original text" id="printls_button" />';
+	document.body.insertBefore(div, document.body.firstChild);
+	document.getElementById("printls_button").onclick =
+		function(){
+			var ta = document.getElementById("printls_textarea");
+			ta.value = decodePrintls(ta.value);
+		};
 }
