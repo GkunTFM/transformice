@@ -15,7 +15,7 @@
 		var img;
 		for(var i = 0; i < imgs.length; i++){
 			img = imgs[i];
-			str = str.replace("!" + img.name, "http://i.imgur.com/" + img.hash + img.ext);
+			str = str.replace(img.name, "http://i.imgur.com/" + img.hash + img.ext);
 		}
 		ta.value = str;
 		console.log("done");
