@@ -192,7 +192,7 @@ end
 
 function eventKeyboard(name, code)
 	if name == USER and code == ("N"):byte() then
-		printls.outputBlocks();
+		printls.outputNextBlock();
 	end
 end
 
