@@ -191,7 +191,6 @@ function eventLoop()
 end
 
 function eventKeyboard(name, code)
-	print("here");
 	if name == USER and code == ("N"):byte() then
 		printls.outputBlocks();
 	end
