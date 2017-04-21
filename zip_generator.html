@@ -26,6 +26,7 @@
 			while(rslt = rx.exec(oldxml)){
 				oldxmlarray[rslt[1]] = {"xml":rslt[2], "img":rslt[3]};
 			}
+			console.log(oldxmlarray);
 
 			log("generating zip file");
 			var zip = new JSZip();
