@@ -7,7 +7,6 @@
 		function generateZIP(){
 			var text = document.getElementById("xmlinput").value;
 			text = decodePrintls(text);
-			document.getElementById("xmlinput").value = text;
 			var xml2image = document.getElementById("swf").XML2Base64;
 			var mapset = text.match(/[^<>\n]*<C>[\s\S]*?<\/C>/g);
 			var i, str, code, xml, image, mapinfo;
@@ -19,6 +18,15 @@
 				log("invalid input");
 				return;
 			}
+
+			var oldxml = document.getElementById("oldxml").value;
+			var rx = /(\d+).*?(<C>[\s\S]*?<\/C>) (.+)/g;
+			var rslt;
+			var oldxmlarray = {};
+			while(rslt = rx.exec(oldxml)){
+				oldxmlarray[rslt[1]] = {"xml":rslt[2], "img":rslt[3]};
+			}
+
 			log("generating zip file");
 			var zip = new JSZip();
 			var numImage = 0;
@@ -26,8 +34,14 @@
 				str = mapset[i];
 				code = str.match(/\d+/);
 				code = code ? code[0] : "map" + i;
-				mapinfo = str.match(/[^<>]*/)[0].replace(/\t/g, " - ");
 				xml = str.match(/<C>[\s\S]*?<\/C>/)[0];
+				if(oldxmlarray[code] && oldxmlarray[code].xml == xml){
+					mapset[i] = mapset[i] + "\t" + oldxmlarray[code].img;
+					continue;
+				}
+				mapset[i] = mapset[i] + "\t" + code;
+
+				mapinfo = str.match(/[^<>]*/)[0].replace(/\t/g, " - ");
 				image = xml2image(xml, mapinfo);
 				if(!image) {
 					log("invalid image : " + code);
@@ -42,6 +56,7 @@
 				}
 			}
 			if(numImage % images_per_zip != 0) saveZip(zip, folderName + "_" + Math.ceil(numImage / images_per_zip) + ".zip");
+			document.getElementById("xmlinput").value = mapset.join("\n");
 		}
 
 		function saveZip(zip, folder){
@@ -60,8 +75,11 @@
 	</script>
 	<p>this tool doesn't work on IE. Flash Player is required.</p>
 	<div>
-		status: <span id="info" style="color: blue">loading components...</span><br/>
-		<textarea id="xmlinput" style="width:600;height: 400"></textarea>	<br />
+		status: <span id="info" style="color: blue">loading components...</span><br/><br/>
+		input map data below<br/>
+		<textarea id="xmlinput" style="width:600px;height: 300px"></textarea>	<br /><br />
+		input old map data if any below<br/>
+		<textarea id="oldxml" style="width:600px;height: 200px"></textarea><br />
 		the number of images per one zip file : <input type="text" value="120" id="images_per_zip" /><br/>
 		<input type="button" value="Generate images and save" onclick="generateZIP()" /> 
 	</div>
