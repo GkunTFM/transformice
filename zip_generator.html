@@ -20,15 +20,12 @@
 			}
 
 			var oldxml = document.getElementById("oldxml").value;
-			console.log(oldxml);
 			var rx = /(\d+).*?(<C>[\s\S]*?<\/C>)\t(.+)/g;
 			var rslt;
 			var oldxmlarray = {};
 			while(rslt = rx.exec(oldxml)){
-				console.log(rslt);
 				oldxmlarray[rslt[1]] = {"xml":rslt[2], "img":rslt[3]};
 			}
-			console.log(oldxmlarray);
 
 			log("generating zip file");
 			var zip = new JSZip();
@@ -45,7 +42,7 @@
 				mapset[i] = mapset[i] + "\t" + code;
 
 				mapinfo = str.match(/[^<>]*/)[0].replace(/\t/g, " - ");
-				image = xml;//image = xml2image(xml, mapinfo);
+				image = xml2image(xml, mapinfo);
 				if(!image) {
 					log("invalid image : " + code);
 					continue;
