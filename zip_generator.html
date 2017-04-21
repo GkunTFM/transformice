@@ -21,7 +21,7 @@
 
 			var oldxml = document.getElementById("oldxml").value;
 			console.log(oldxml);
-			var rx = /(\d+).*?(<C>[\s\S]*?<\/C>) (.+)/g;
+			var rx = /(\d+).*?(<C>[\s\S]*?<\/C>)\t(.+)/g;
 			var rslt;
 			var oldxmlarray = {};
 			while(rslt = rx.exec(oldxml)){
