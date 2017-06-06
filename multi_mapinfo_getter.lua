@@ -77,7 +77,7 @@ function eventNewGame()
 		if ptag then
 			wind, gravity = string.match(ptag, "G%s*=%s*\"(.-),%s*(.-)\"");
 			noBalloon = string.match(ptag, [[DIVINITYNOBALLOON%s*=%s*""]]) and "no_balloon " or "";
-			opportunist = string.match(ptag, [[DIIVNITYOPPORTUNIST%s*=%s*""]]) and "opportunist " or "";
+			opportunist = string.match(ptag, [[DIVINITYOPPORTUNIST%s*=%s*""]]) and "opportunist " or "";
 		end
 		info.wind, info.gravity = wind or 0, gravity or 10;
 		info.divconf = noBalloon .. opportunist;
